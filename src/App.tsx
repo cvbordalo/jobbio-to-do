@@ -1,3 +1,5 @@
+import { Router } from './Router';
+
 export function App() {
-  return <h1>Dashgo</h1>;
+  return <Router />;
 }
