@@ -4,36 +4,27 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Checkbox,
   Stack,
   Link,
-  Button,
   Heading,
-  Text,
-  useColorModeValue
+  Text
 } from '@chakra-ui/react';
+import { FormButton } from '../components/FormButton';
+import { NavLink } from 'react-router-dom';
 
 export function SignIn() {
   return (
-    <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}
-    >
+    <Flex align={'center'} justify={'center'}>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Sign in to your account</Heading>
-          <Text fontSize={'lg'} color={'gray.600'}>
-            to enjoy all of our cool <Link color={'blue.400'}>features</Link> ✌️
+          <Heading color={'gray.200'} fontSize={'4xl'}>
+            Sign in to your account
+          </Heading>
+          <Text fontSize={'lg'} color={'gray.200'}>
+            and start your <Link color={'blue.300'}>to do list!</Link> ✌️
           </Text>
         </Stack>
-        <Box
-          rounded={'lg'}
-          bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
-          p={8}
-        >
+        <Box rounded={'lg'} bg={'gray.100'} boxShadow={'lg'} p={8}>
           <Stack spacing={4}>
             <FormControl id="email">
               <FormLabel>Email address</FormLabel>
@@ -49,18 +40,11 @@ export function SignIn() {
                 align={'start'}
                 justify={'space-between'}
               >
-                <Checkbox>Remember me</Checkbox>
-                <Link color={'blue.400'}>Forgot password?</Link>
+                <NavLink to="/signup">
+                  <Link color={'blue.300'}>Or create your account here!</Link>
+                </NavLink>
               </Stack>
-              <Button
-                bg={'blue.400'}
-                color={'white'}
-                _hover={{
-                  bg: 'blue.500'
-                }}
-              >
-                Sign in
-              </Button>
+              <FormButton title="Sign In" />
             </Stack>
           </Stack>
         </Box>
