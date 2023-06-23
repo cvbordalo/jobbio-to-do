@@ -1,14 +1,4 @@
-import {
-  Flex,
-  Box,
-  FormControl,
-  FormLabel,
-  Input,
-  Stack,
-  Link,
-  Heading,
-  Text
-} from '@chakra-ui/react';
+import { Flex, Box, Stack, Link, Heading, Text } from '@chakra-ui/react';
 import { FormButton } from '../components/FormButton';
 import { NavLink } from 'react-router-dom';
 import { FormInput } from '../components/FormInput';

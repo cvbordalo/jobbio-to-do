@@ -1,27 +1,18 @@
 import {
   Flex,
   Box,
-  FormControl,
-  FormLabel,
-  Input,
-  InputGroup,
   HStack,
-  InputRightElement,
   Stack,
-  Button,
   Heading,
   Text,
   Link
 } from '@chakra-ui/react';
-import { useState } from 'react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { FormButton } from '../components/FormButton';
 import { NavLink } from 'react-router-dom';
 import { FormInput } from '../components/FormInput';
+import { FormInputPassword } from '../components/FormInputPassword';
 
 export function SignUp() {
-  const [showPassword, setShowPassword] = useState(false);
-
   return (
     <Flex align={'center'} justify={'center'}>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
@@ -59,27 +50,9 @@ export function SignUp() {
               type={'email'}
               label="Email Address"
             />
-            <FormControl id="password" isRequired>
-              <FormLabel>Password</FormLabel>
-              <InputGroup>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  focusBorderColor="blue.300"
-                />
-                <InputRightElement h={'full'}>
-                  <Button
-                    variant={'ghost'}
-                    onClick={() =>
-                      setShowPassword(showPassword => !showPassword)
-                    }
-                  >
-                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
+            <FormInputPassword />
             <Stack spacing={10} pt={2}>
-              <FormButton title="Sign Up" />
+              <FormButton title="Sign Up" />F
             </Stack>
             <Stack pt={6}>
               <Text align={'center'}>

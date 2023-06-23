@@ -1,10 +1,10 @@
-import { Button } from '@chakra-ui/react';
+import { Button, ButtonProps } from '@chakra-ui/react';
 
-interface FormButtonProps {
+interface FormButtonProps extends ButtonProps {
   title: string;
 }
 
-export function FormButton({ title }: FormButtonProps) {
+export function FormButton({ title, ...rest }: FormButtonProps) {
   return (
     <Button
       bg={'blue.300'}
@@ -12,6 +12,7 @@ export function FormButton({ title }: FormButtonProps) {
       _hover={{
         bg: 'blue.700'
       }}
+      {...rest}
     >
       {title}
     </Button>
