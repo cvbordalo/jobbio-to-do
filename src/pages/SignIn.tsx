@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { FormButton } from '../components/FormButton';
 import { NavLink } from 'react-router-dom';
+import { FormInput } from '../components/FormInput';
 
 export function SignIn() {
   return (
@@ -26,14 +27,8 @@ export function SignIn() {
         </Stack>
         <Box rounded={'lg'} bg={'gray.100'} boxShadow={'lg'} p={8}>
           <Stack spacing={4}>
-            <FormControl id="email">
-              <FormLabel>Email address</FormLabel>
-              <Input type="email" />
-            </FormControl>
-            <FormControl id="password">
-              <FormLabel>Password</FormLabel>
-              <Input type="password" />
-            </FormControl>
+            <FormInput name="email" type={'email'} label="Email address" />
+            <FormInput name="password" type={'password'} label="Password" />
             <Stack spacing={10}>
               <Stack
                 direction={{ base: 'column', sm: 'row' }}
