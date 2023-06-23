@@ -2,8 +2,15 @@ import { Flex, Box, Stack, Link, Heading, Text } from '@chakra-ui/react';
 import { FormButton } from '../components/FormButton';
 import { NavLink } from 'react-router-dom';
 import { FormInput } from '../components/FormInput';
+import { useNavigate } from 'react-router-dom';
 
 export function SignIn() {
+  const navigate = useNavigate();
+
+  const handleNavigateToMain = () => {
+    navigate('/main');
+  };
+
   return (
     <Flex align={'center'} justify={'center'}>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
@@ -29,7 +36,7 @@ export function SignIn() {
                   <Link color={'blue.300'}>Or create your account here!</Link>
                 </NavLink>
               </Stack>
-              <FormButton title="Sign In" />
+              <FormButton title="Sign In" onClick={handleNavigateToMain} />
             </Stack>
           </Stack>
         </Box>
