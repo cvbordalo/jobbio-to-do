@@ -13,10 +13,10 @@ export default function Footer() {
         align={{ base: 'center', md: 'center' }}
       >
         <Text color="gray.100">
-          © Made by{' '}
-          <a href="https://www.linkedin.com/in/cvbordalo/" target="_blank">
-            <Link color={'blue.300'}>Carlos Vitor Bordalo</Link>
-          </a>{' '}
+          © Developed by{' '}
+          <Link href="https://www.linkedin.com/in/cvbordalo/" target="_blank">
+            Carlos Vitor Bordalo
+          </Link>{' '}
           to Jobbio.
         </Text>
       </Container>

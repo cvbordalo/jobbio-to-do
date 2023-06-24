@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom';
 export function SignIn() {
   const navigate = useNavigate();
 
-  const handleNavigateToMain = () => {
-    navigate('/main');
+  const handleNavigateToHome = () => {
+    navigate('/home');
   };
 
   return (
@@ -36,7 +36,7 @@ export function SignIn() {
                   <Link color={'blue.300'}>Or create your account here!</Link>
                 </NavLink>
               </Stack>
-              <FormButton title="Sign In" onClick={handleNavigateToMain} />
+              <FormButton title="Sign In" onClick={handleNavigateToHome} />
             </Stack>
           </Stack>
         </Box>
