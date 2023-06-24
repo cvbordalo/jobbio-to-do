@@ -1,12 +1,4 @@
-import {
-  Box,
-  Checkbox,
-  HStack,
-  Heading,
-  Icon,
-  Text,
-  VStack
-} from '@chakra-ui/react';
+import { Box, HStack, Heading, Icon, Text, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
 import { Task } from '../Task';
@@ -15,6 +7,7 @@ import { FullCreateTask } from '../FullCreateTask';
 import { v4 as uuidv4 } from 'uuid';
 
 interface ListProps {
+  index: number;
   id: string;
   title: string;
   removeList: (id: string) => void;
@@ -26,7 +19,7 @@ interface TaskProps {
   isComplete: boolean;
 }
 
-export function List({ title, id, removeList }: ListProps) {
+export function List({ title, id, removeList, index }: ListProps) {
   const [tasks, setTasks] = useState<TaskProps[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
@@ -41,7 +34,7 @@ export function List({ title, id, removeList }: ListProps) {
       isComplete: false
     };
 
-    setTasks([...tasks, newTask]);
+    setTasks([newTask, ...tasks]);
     setNewTaskTitle('');
   }
 
@@ -66,7 +59,12 @@ export function List({ title, id, removeList }: ListProps) {
 
   return (
     <>
-      <HStack display={'flex'} justify={'space-between'} w={'100%'}>
+      <HStack
+        display={'flex'}
+        justify={'space-between'}
+        w={'100%'}
+        mt={index === 0 ? 0 : 8}
+      >
         <Heading alignSelf={'flex-start'} color={'gray.200'} fontSize={'xl'}>
           {title}
         </Heading>
@@ -96,7 +94,14 @@ export function List({ title, id, removeList }: ListProps) {
           </Box>
         </HStack>
         <HStack>
-          <Text color={'purple.300'} fontWeight={'extrabold'}>
+          <Text
+            color={
+              completedTasks != 0 && completedTasks == tasks.length
+                ? 'green.300'
+                : 'purple.300'
+            }
+            fontWeight={'extrabold'}
+          >
             Completed
           </Text>
           <Box px={2} py={0.2} borderRadius={4} bg={'gray.400'}>

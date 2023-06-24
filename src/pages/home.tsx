@@ -22,9 +22,7 @@ export function Home() {
       title: newListTitle
     };
 
-    console.log(newList);
-
-    setLists([...lists, newList]);
+    setLists([newList, ...lists]);
     setNewListTitle('');
   }
 
@@ -35,7 +33,7 @@ export function Home() {
   }
 
   return (
-    <VStack m="auto" h={'100vh'} maxW={'46rem'}>
+    <VStack m="auto" minH={'100vh'} maxW={'46rem'}>
       <Flex position={'relative'} bottom={7} w="100%">
         <FullCreateList
           newListTitle={newListTitle}
@@ -44,12 +42,13 @@ export function Home() {
           placeholder="Add a new list"
         />
       </Flex>
-      <VStack m="auto" w={'100%'} h={'100%'} maxW={'46rem'}>
+      <VStack w={'100%'} h={'100%'} maxW={'46rem'}>
         {lists.length <= 0 ? (
           <EmptyList />
         ) : (
-          lists.map(list => (
+          lists.map((list, index) => (
             <List
+              index={index}
               key={list.id}
               title={list.title}
               id={list.id}

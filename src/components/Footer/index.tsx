@@ -2,7 +2,7 @@ import { Box, Container, Link, Stack, Text } from '@chakra-ui/react';
 
 export default function Footer() {
   return (
-    <Box bg={'gray.600'}>
+    <Box bg={'gray.600'} mt={'auto'}>
       <Container
         as={Stack}
         maxW={'6xl'}

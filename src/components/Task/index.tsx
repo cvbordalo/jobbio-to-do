@@ -1,5 +1,5 @@
 import { Checkbox, HStack, Icon, Text } from '@chakra-ui/react';
-import { FiTrash2 } from 'react-icons/fi';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
 interface TaskProps {
   id: string;
@@ -30,16 +30,31 @@ export function Task({
       borderColor={'gray.400'}
     >
       <Checkbox onChange={() => toggleComplete(id)} isChecked={isComplete} />
-      <Text ml={2} flex={1} color={'gray.100'}>
+      <Text
+        ml={2}
+        textDecoration={isComplete ? 'line-through' : ''}
+        flex={1}
+        color={'gray.100'}
+      >
         {title}
       </Text>
-      <Icon
-        as={FiTrash2}
-        color={'gray.300'}
-        _hover={{ color: 'red.300' }}
-        cursor={'pointer'}
-        onClick={() => removeTask(id)}
-      />
+      <HStack>
+        <Icon
+          as={FiEdit}
+          color={'gray.300'}
+          _hover={{ color: 'green.300' }}
+          cursor={'pointer'}
+          mr={2}
+          // onClick={() => removeTask(id)}
+        />
+        <Icon
+          as={FiTrash2}
+          color={'gray.300'}
+          _hover={{ color: 'red.300' }}
+          cursor={'pointer'}
+          onClick={() => removeTask(id)}
+        />
+      </HStack>
     </HStack>
   );
 }
