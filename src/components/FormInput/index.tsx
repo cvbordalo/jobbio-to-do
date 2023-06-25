@@ -4,7 +4,6 @@ import {
   Input,
   InputProps as ChakraInputProps
 } from '@chakra-ui/react';
-import { FieldValues, UseFormRegister } from 'react-hook-form';
 
 interface FormInputProps extends ChakraInputProps {
   name: string;

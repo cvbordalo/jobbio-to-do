@@ -9,10 +9,11 @@ import {
 } from '@chakra-ui/react';
 import { FormButton } from '../components/FormButton';
 import { FormInput } from '../components/FormInput';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { theme } from '../styles/theme';
 
 const schema = yup
   .object({
@@ -58,7 +59,11 @@ export function SignIn() {
             Sign in to your account
           </Heading>
           <Text fontSize={'lg'} color={'gray.200'}>
-            and start your <Link color={'blue.300'}>to do list!</Link> ✌️
+            and start your{' '}
+            <Text as="span" color={'blue.300'}>
+              to do list!
+            </Text>{' '}
+            ✌️
           </Text>
         </Stack>
         <Box rounded={'lg'} bg={'gray.100'} boxShadow={'lg'} p={8}>
@@ -88,9 +93,12 @@ export function SignIn() {
                   align={'start'}
                   justify={'space-between'}
                 >
-                  <Link href="/signup" color={'blue.300'}>
+                  <NavLink
+                    to="/signup"
+                    style={{ color: theme.colors.blue['700'] }}
+                  >
                     Or create your account here!
-                  </Link>
+                  </NavLink>
                 </Stack>
                 <FormButton
                   isDisabled={!isValid}

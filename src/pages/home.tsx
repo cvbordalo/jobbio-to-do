@@ -14,7 +14,7 @@ export function Home() {
   const [lists, setLists] = useState<ListProps[]>([]);
   const [newListTitle, setNewListTitle] = useState<string>('');
 
-  function handleCreateNewList() {
+  const handleCreateNewList = () => {
     if (!newListTitle) return;
 
     const newList = {
@@ -24,13 +24,13 @@ export function Home() {
 
     setLists([newList, ...lists]);
     setNewListTitle('');
-  }
+  };
 
-  function handleRemoveList(id: string) {
+  const handleRemoveList = (id: string) => {
     const filteredLists = lists.filter(list => list.id !== id);
 
     setLists(filteredLists);
-  }
+  };
 
   return (
     <VStack m="auto" minH={'100vh'} maxW={'46rem'}>

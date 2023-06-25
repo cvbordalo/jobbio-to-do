@@ -25,7 +25,7 @@ export function List({ title, id, removeList, index }: ListProps) {
 
   const completedTasks = tasks.filter(task => task.isComplete).length;
 
-  function handleCreateNewTask() {
+  const handleCreateNewTask = () => {
     if (!newTaskTitle) return;
 
     const newTask = {
@@ -36,9 +36,9 @@ export function List({ title, id, removeList, index }: ListProps) {
 
     setTasks([newTask, ...tasks]);
     setNewTaskTitle('');
-  }
+  };
 
-  function handleToggleTaskCompletion(id: string) {
+  const handleToggleTaskCompletion = (id: string) => {
     const mappedTasks = tasks.map(task =>
       task.id === id
         ? {
@@ -49,13 +49,13 @@ export function List({ title, id, removeList, index }: ListProps) {
     );
 
     setTasks(mappedTasks);
-  }
+  };
 
-  function handleRemoveTask(id: string) {
+  const handleRemoveTask = (id: string) => {
     const filteredTasks = tasks.filter(task => task.id !== id);
 
     setTasks(filteredTasks);
-  }
+  };
 
   return (
     <>

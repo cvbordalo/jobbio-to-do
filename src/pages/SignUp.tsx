@@ -14,6 +14,8 @@ import { FormInputPassword } from '../components/FormInputPassword';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { NavLink } from 'react-router-dom';
+import { theme } from '../styles/theme';
 
 const schema = yup
   .object({
@@ -130,9 +132,9 @@ export function SignUp() {
               <Stack pt={6}>
                 <Text align={'center'}>
                   Already an user?{' '}
-                  <Link href="/" color={'blue.400'}>
+                  <NavLink to="/" style={{ color: theme.colors.blue['700'] }}>
                     Login
-                  </Link>
+                  </NavLink>
                 </Text>
               </Stack>
             </Stack>
