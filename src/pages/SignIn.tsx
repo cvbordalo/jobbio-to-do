@@ -1,14 +1,53 @@
-import { Flex, Box, Stack, Link, Heading, Text } from '@chakra-ui/react';
+import {
+  Flex,
+  Box,
+  Stack,
+  Link,
+  Heading,
+  Text,
+  FormControl
+} from '@chakra-ui/react';
 import { FormButton } from '../components/FormButton';
-import { NavLink } from 'react-router-dom';
 import { FormInput } from '../components/FormInput';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+const schema = yup
+  .object({
+    email: yup.string().email('Type a valid email').required('Email is needed'),
+    password: yup
+      .string()
+      .min(6, 'Password must be at least 6 characters')
+      .required('Password is needed')
+  })
+  .required();
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
 export function SignIn() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid }
+  } = useForm<LoginFormData>({
+    resolver: yupResolver(schema),
+    mode: 'onChange'
+  });
+
   const navigate = useNavigate();
 
   const handleNavigateToHome = () => {
     navigate('/home');
+  };
+
+  const onSubmit = (userData: LoginFormData) => {
+    console.log(userData);
+    handleNavigateToHome();
   };
 
   return (
@@ -24,20 +63,43 @@ export function SignIn() {
         </Stack>
         <Box rounded={'lg'} bg={'gray.100'} boxShadow={'lg'} p={8}>
           <Stack spacing={4}>
-            <FormInput name="email" type={'email'} label="Email address" />
-            <FormInput name="password" type={'password'} label="Password" />
-            <Stack spacing={10}>
-              <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                align={'start'}
-                justify={'space-between'}
-              >
-                <NavLink to="/signup">
-                  <Link color={'blue.300'}>Or create your account here!</Link>
-                </NavLink>
+            <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
+              <FormInput
+                name="email"
+                type={'email'}
+                label="Email address"
+                register={register('email', { required: true })}
+              />
+              <Text fontSize={'xs'} mt={1} color={'red.700'}>
+                {errors.email?.message}
+              </Text>
+              <FormInput
+                name="password"
+                type={'password'}
+                label="Password"
+                register={register('password', { required: true })}
+              />
+              <Text fontSize={'xs'} mt={1} color={'red.700'}>
+                {errors.password?.message}
+              </Text>
+              <Stack spacing={10}>
+                <Stack
+                  direction={{ base: 'column', sm: 'row' }}
+                  align={'start'}
+                  justify={'space-between'}
+                >
+                  <Link href="/signup" color={'blue.300'}>
+                    Or create your account here!
+                  </Link>
+                </Stack>
+                <FormButton
+                  isDisabled={!isValid}
+                  // isLoading
+                  type="submit"
+                  title="Sign In"
+                />
               </Stack>
-              <FormButton title="Sign In" onClick={handleNavigateToHome} />
-            </Stack>
+            </FormControl>
           </Stack>
         </Box>
       </Stack>

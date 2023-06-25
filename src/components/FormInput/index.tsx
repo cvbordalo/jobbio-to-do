@@ -4,23 +4,20 @@ import {
   Input,
   InputProps as ChakraInputProps
 } from '@chakra-ui/react';
+import { FieldValues, UseFormRegister } from 'react-hook-form';
 
 interface FormInputProps extends ChakraInputProps {
   name: string;
   label?: string;
-  isRequired?: boolean;
+  register: any;
 }
 
-export function FormInput({
-  name,
-  label,
-  isRequired = false,
-  ...rest
-}: FormInputProps) {
+export function FormInput({ name, label, register, ...rest }: FormInputProps) {
   return (
-    <FormControl isRequired={isRequired}>
+    <FormControl mt={4}>
       {!!label && <FormLabel htmlFor={name}>{label}</FormLabel>}
       <Input
+        {...register}
         name={name}
         id={name}
         bgColor={'gray.100'}

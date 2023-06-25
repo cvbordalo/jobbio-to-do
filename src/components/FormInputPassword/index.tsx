@@ -9,14 +9,22 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
-export function FormInputPassword() {
+interface FormInputPasswordProps {
+  type: 'password' | 'confirmPassword';
+  register: any;
+}
+
+export function FormInputPassword({ type, register }: FormInputPasswordProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <FormControl id="password" isRequired>
-      <FormLabel>Password</FormLabel>
+    <FormControl>
+      <FormLabel>
+        {type === 'password' ? 'Password' : 'Confirm Password'}
+      </FormLabel>
       <InputGroup>
         <Input
+          {...register}
           type={showPassword ? 'text' : 'password'}
           focusBorderColor="blue.300"
         />
