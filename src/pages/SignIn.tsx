@@ -1,12 +1,4 @@
-import {
-  Flex,
-  Box,
-  Stack,
-  Link,
-  Heading,
-  Text,
-  FormControl
-} from '@chakra-ui/react';
+import { Flex, Box, Stack, Heading, Text, FormControl } from '@chakra-ui/react';
 import { FormButton } from '../components/FormButton';
 import { FormInput } from '../components/FormInput';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -14,6 +6,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { theme } from '../styles/theme';
+import { UserAuth } from '../contexts/AuthContext';
+import { useState } from 'react';
 
 const schema = yup
   .object({
@@ -40,15 +34,25 @@ export function SignIn() {
     mode: 'onChange'
   });
 
-  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleNavigateToHome = () => {
-    navigate('/home');
+  const navigate = useNavigate();
+  const { login } = UserAuth();
+
+  const handleLogin = async (email: string, password: string) => {
+    setIsLoading(true);
+    try {
+      await login(email, password);
+      navigate('/home');
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const onSubmit = (userData: LoginFormData) => {
-    console.log(userData);
-    handleNavigateToHome();
+    handleLogin(userData.email, userData.password);
   };
 
   return (
@@ -102,7 +106,7 @@ export function SignIn() {
                 </Stack>
                 <FormButton
                   isDisabled={!isValid}
-                  // isLoading
+                  isLoading={isLoading}
                   type="submit"
                   title="Sign In"
                 />

@@ -14,8 +14,10 @@ import { FormInputPassword } from '../components/FormInputPassword';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { theme } from '../styles/theme';
+import { UserAuth } from '../contexts/AuthContext';
+import { useState } from 'react';
 
 const schema = yup
   .object({
@@ -51,8 +53,26 @@ export function SignUp() {
     mode: 'onChange'
   });
 
-  const onSubmit = (userData: SignUpFormData) => {
-    console.log(userData);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const { createUser } = UserAuth();
+
+  const onSubmit = async (userData: SignUpFormData) => {
+    setIsLoading(true);
+
+    try {
+      const firebaseResponse = await createUser(
+        userData.email,
+        userData.password
+      );
+      console.log(firebaseResponse);
+      navigate('/home');
+    } catch (error) {
+      console.log('Erro no firebase =>', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -124,6 +144,7 @@ export function SignUp() {
 
               <Stack spacing={10} pt={2}>
                 <FormButton
+                  isLoading={isLoading}
                   isDisabled={!isValid}
                   type="submit"
                   title="Sign Up"
@@ -133,7 +154,7 @@ export function SignUp() {
                 <Text align={'center'}>
                   Already an user?{' '}
                   <NavLink to="/" style={{ color: theme.colors.blue['700'] }}>
-                    Login
+                    Sign In
                   </NavLink>
                 </Text>
               </Stack>
