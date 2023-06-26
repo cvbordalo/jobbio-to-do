@@ -3,10 +3,13 @@ import {
   CircularProgress,
   HStack,
   Icon,
+  Input,
   Text
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import { EditTaskButton } from '../EditTaskButton';
+import { updateTaskTitle } from '../../queries';
 
 interface TodoProps {
   id: string;
@@ -22,6 +25,27 @@ interface TaskProps {
 
 export function Task({ task, toggleComplete, removeTask }: TaskProps) {
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
+  const [isBeingEdited, setIsBeingEdited] = useState<boolean>(false);
+  const [updatedTask, setUpdatedTask] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const toggleIsBeingEdited = () => {
+    setIsBeingEdited(!isBeingEdited);
+  };
+
+  const handleUpdateTask = async () => {
+    setIsLoading(true);
+    try {
+      await updateTaskTitle(task, updatedTask);
+
+      task.title = updatedTask;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsBeingEdited(false);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <HStack
@@ -40,14 +64,39 @@ export function Task({ task, toggleComplete, removeTask }: TaskProps) {
         onChange={() => toggleComplete(task.id, task)}
         isChecked={task.isComplete}
       />
-      <Text
-        ml={2}
-        textDecoration={task.isComplete ? 'line-through' : ''}
-        flex={1}
-        color={'gray.100'}
-      >
-        {task.title}
-      </Text>
+      {isBeingEdited ? (
+        <HStack w={'100%'} spacing={2}>
+          <Input
+            ml={2}
+            flex={1}
+            _placeholder={{ color: 'gray.100' }}
+            placeholder={task.title}
+            onChange={event => setUpdatedTask(event.target.value)}
+            color={'gray.100'}
+          />
+          <EditTaskButton
+            setIsBeingUpdated={setIsBeingEdited}
+            type="update"
+            updateTask={handleUpdateTask}
+            isLoading={isLoading}
+          />
+          <EditTaskButton
+            setIsBeingUpdated={setIsBeingEdited}
+            type="cancel"
+            updateTask={() => {}}
+          />
+        </HStack>
+      ) : (
+        <Text
+          ml={2}
+          textDecoration={task.isComplete ? 'line-through' : ''}
+          flex={1}
+          color={'gray.100'}
+        >
+          {task.title}
+        </Text>
+      )}
+
       <HStack>
         <Icon
           as={FiEdit}
@@ -55,7 +104,7 @@ export function Task({ task, toggleComplete, removeTask }: TaskProps) {
           _hover={{ color: 'green.300' }}
           cursor={'pointer'}
           mr={2}
-          // onClick={() => removeTask(id)}
+          onClick={toggleIsBeingEdited}
         />
         {isDeleteLoading ? (
           <CircularProgress isIndeterminate size={4} color="gray.300" />

@@ -81,3 +81,9 @@ export const toggleCompleteTask = async (task: TaskProps) => {
     isComplete: !task.isComplete
   });
 };
+
+export const updateTaskTitle = async (task: TaskProps, newTitle: string) => {
+  await updateDoc(doc(db, 'tasks', task.id), {
+    title: newTitle
+  });
+};
