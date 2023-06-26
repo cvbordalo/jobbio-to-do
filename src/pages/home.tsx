@@ -1,22 +1,11 @@
-import {
-  Center,
-  Flex,
-  HStack,
-  Icon,
-  IconButton,
-  Text,
-  VStack
-} from '@chakra-ui/react';
+import { Flex, HStack, Icon, Text, VStack, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { EmptyList } from '../components/EmptyList';
 import { List } from '../components/List';
 import { FullCreateList } from '../components/FullCreateList';
-import { v4 as uuidv4 } from 'uuid';
 import { UserAuth } from '../contexts/AuthContext';
 import { FiLogOut } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import { collection, onSnapshot, query } from 'firebase/firestore';
-import { db } from '../firebase';
 import { createList, deleteList, getListsByUser } from '../queries';
 
 export interface ListProps {
@@ -31,42 +20,75 @@ export function Home() {
 
   const { user, logout } = UserAuth();
   const navigate = useNavigate();
+  const toast = useToast();
 
+  // User Logout
   const handleLogout = async () => {
     try {
       await logout();
       navigate('/');
     } catch (error) {
-      console.log('error in logout', error);
+      console.log('Error in logout =>', error);
     }
   };
 
+  // Create List by User
   const handleCreateNewList = async () => {
-    if (!newListTitle) return;
-    setIsLoading(true);
-    const listId = await createList(user?.uid, newListTitle);
+    try {
+      if (!newListTitle) return;
+      setIsLoading(true);
+      const listId = await createList(user?.uid, newListTitle);
 
-    const newList = {
-      id: listId as string,
-      title: newListTitle
-    };
+      const newList = {
+        id: listId as string,
+        title: newListTitle
+      };
 
-    setLists([newList, ...lists]);
-    setNewListTitle('');
-    setIsLoading(false);
+      setLists([newList, ...lists]);
+      setNewListTitle('');
+      setIsLoading(false);
+      toast({
+        position: 'top',
+        title: 'List created',
+        description: 'Your list was created successfuly',
+        status: 'success',
+        duration: 4000,
+        isClosable: true
+      });
+    } catch (error) {
+      console.log('Error while creating list =>', error);
+      toast({
+        position: 'top',
+        title: 'List not created',
+        description: 'Failed to create new list',
+        status: 'error',
+        duration: 4000,
+        isClosable: true
+      });
+    }
   };
 
+  // Delete List
   const handleRemoveList = async (id: string) => {
     try {
       await deleteList(id);
       const filteredLists = lists.filter(list => list.id !== id);
 
       setLists(filteredLists);
+      toast({
+        position: 'top',
+        title: 'List deleted',
+        description: 'Your list was deleted successfuly',
+        status: 'error',
+        duration: 4000,
+        isClosable: true
+      });
     } catch (error) {
-      console.log(error);
+      console.log('Error in deleting list => ', error);
     }
   };
 
+  // Redirects non authenticated user
   useEffect(() => {
     if (!user) {
       navigate('/');
@@ -87,7 +109,7 @@ export function Home() {
   }, [user?.uid]);
 
   return (
-    <VStack m="auto" minH={'100vh'} maxW={'46rem'}>
+    <VStack m="auto" minH={'100vh'} maxW={'46rem'} mx={[4, 'auto']}>
       <Flex position={'relative'} bottom={7} w="100%">
         <FullCreateList
           isLoading={isLoading}

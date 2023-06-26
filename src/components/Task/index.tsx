@@ -11,28 +11,32 @@ import { FiEdit, FiTrash2 } from 'react-icons/fi';
 import { EditTaskButton } from '../EditTaskButton';
 import { updateTaskTitle } from '../../queries';
 
-interface TodoProps {
+// Interface for tasks
+interface TaskProps {
   id: string;
   title: string;
   isComplete: boolean;
 }
 
-interface TaskProps {
-  task: TodoProps;
-  toggleComplete: (id: string, task: TodoProps) => void;
+// Interace for the component Task
+interface TaskComponentProps {
+  task: TaskProps;
+  toggleComplete: (id: string, task: TaskProps) => void;
   removeTask: (id: string) => void;
 }
 
-export function Task({ task, toggleComplete, removeTask }: TaskProps) {
+export function Task({ task, toggleComplete, removeTask }: TaskComponentProps) {
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
   const [isBeingEdited, setIsBeingEdited] = useState<boolean>(false);
   const [updatedTask, setUpdatedTask] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // Toggle edit task title
   const toggleIsBeingEdited = () => {
     setIsBeingEdited(!isBeingEdited);
   };
 
+  // Update Task title
   const handleUpdateTask = async () => {
     setIsLoading(true);
     try {

@@ -1,4 +1,4 @@
-import { Center, Icon, Text, VStack } from '@chakra-ui/react';
+import { Icon, Text, VStack } from '@chakra-ui/react';
 import { FiClipboard } from 'react-icons/fi';
 
 export function EmptyList() {

@@ -13,7 +13,6 @@ import { FiEdit, FiTrash2 } from 'react-icons/fi';
 import { Task } from '../Task';
 import { EmptyTasks } from '../EmptyTasks';
 import { FullCreateTask } from '../FullCreateTask';
-import { v4 as uuidv4 } from 'uuid';
 import {
   createTask,
   deleteTask,
@@ -25,6 +24,7 @@ import { UserAuth } from '../../contexts/AuthContext';
 import { EditTaskButton } from '../EditTaskButton';
 import { useNavigate } from 'react-router-dom';
 
+// Interface for Lists
 interface ListProps {
   index: number;
   id: string;
@@ -32,6 +32,7 @@ interface ListProps {
   removeList: (id: string) => void;
 }
 
+// Interface for Tasks
 export interface TaskProps {
   id: string;
   title: string;
@@ -51,6 +52,7 @@ export function List({ title, id, removeList, index }: ListProps) {
   const { user } = UserAuth();
   const navigate = useNavigate();
 
+  // Toggle edit List Title
   const toggleIsBeingEdited = () => {
     setIsBeingEdited(!isBeingEdited);
   };
@@ -73,6 +75,7 @@ export function List({ title, id, removeList, index }: ListProps) {
     setIsLoading(false);
   };
 
+  // Toggle checkbox from task
   const handleToggleTaskCompletion = async (id: string, task: TaskProps) => {
     try {
       await toggleCompleteTask(task);
@@ -87,6 +90,7 @@ export function List({ title, id, removeList, index }: ListProps) {
     }
   };
 
+  // Delete task
   const handleRemoveTask = async (id: string) => {
     try {
       await deleteTask(id);
@@ -98,6 +102,7 @@ export function List({ title, id, removeList, index }: ListProps) {
     }
   };
 
+  // Update List title
   const handleUpdateListTitle = async () => {
     setIsUpdateLoading(true);
     try {

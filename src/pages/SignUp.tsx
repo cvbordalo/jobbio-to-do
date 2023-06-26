@@ -6,7 +6,8 @@ import {
   Heading,
   Text,
   Link,
-  FormControl
+  FormControl,
+  useToast
 } from '@chakra-ui/react';
 import { FormButton } from '../components/FormButton';
 import { FormInput } from '../components/FormInput';
@@ -19,6 +20,7 @@ import { theme } from '../styles/theme';
 import { UserAuth } from '../contexts/AuthContext';
 import { useState } from 'react';
 
+// Schema for registration
 const schema = yup
   .object({
     email: yup.string().email('Type a valid email').required('Email is needed'),
@@ -35,6 +37,7 @@ const schema = yup
   })
   .required();
 
+// Interface for Sign Up
 interface SignUpFormData {
   email: string;
   firstName: string;
@@ -44,6 +47,7 @@ interface SignUpFormData {
 }
 
 export function SignUp() {
+  // React Hook Form
   const {
     register,
     handleSubmit,
@@ -57,7 +61,9 @@ export function SignUp() {
 
   const navigate = useNavigate();
   const { createUser } = UserAuth();
+  const toast = useToast();
 
+  // Submit login function by React Hook Form
   const onSubmit = async (userData: SignUpFormData) => {
     setIsLoading(true);
 
@@ -65,6 +71,28 @@ export function SignUp() {
       await createUser(userData.email, userData.password);
       navigate('/home');
     } catch (error) {
+      if (
+        error == 'FirebaseError: Firebase: Error (auth/email-already-in-use).'
+      ) {
+        toast({
+          position: 'top',
+          title: 'Failed to create account',
+          description: 'Email already registered.',
+          status: 'error',
+          duration: 4000,
+          isClosable: true
+        });
+      } else {
+        toast({
+          position: 'top',
+          title: 'Failed to create account',
+          description: 'Please try again later',
+          status: 'error',
+          duration: 4000,
+          isClosable: true
+        });
+      }
+
       console.log('Erro no firebase =>', error);
     } finally {
       setIsLoading(false);

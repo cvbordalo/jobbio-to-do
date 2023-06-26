@@ -12,6 +12,9 @@ import { db } from '../firebase';
 import { ListProps } from '../pages/home';
 import { TaskProps } from '../components/List';
 
+// ---------------   QUERYS FOR LISTS   ----------------
+
+// Create List
 export const createList = async (userId: string | undefined, title: string) => {
   try {
     const response = await addDoc(collection(db, 'lists'), {
@@ -25,6 +28,7 @@ export const createList = async (userId: string | undefined, title: string) => {
   }
 };
 
+// Get Lists
 export const getListsByUser = async (userId: string) => {
   const q = query(collection(db, 'lists'), where('userId', '==', userId));
   let listArray: ListProps[] = [];
@@ -36,18 +40,21 @@ export const getListsByUser = async (userId: string) => {
   return listArray;
 };
 
+// Delete Lists
 export const deleteList = async (userId: string) => {
   await deleteDoc(doc(db, 'lists', userId));
 };
 
+// Update Lists
 export const updateListTitle = async (listId: string, newTitle: string) => {
   await updateDoc(doc(db, 'lists', listId), {
     title: newTitle
   });
 };
 
-// TASKS
+// ---------------   QUERYS FOR TASKS   ----------------
 
+// Create task
 export const createTask = async (listId: string | undefined, title: string) => {
   try {
     const response = await addDoc(collection(db, 'tasks'), {
@@ -62,6 +69,7 @@ export const createTask = async (listId: string | undefined, title: string) => {
   }
 };
 
+// Get Tasks
 export const getTasksByList = async (listId: string) => {
   const q = query(collection(db, 'tasks'), where('listId', '==', listId));
   let taskArray: TaskProps[] = [];
@@ -77,17 +85,19 @@ export const getTasksByList = async (listId: string) => {
   return taskArray;
 };
 
+// Delete tasks
 export const deleteTask = async (listId: string) => {
   await deleteDoc(doc(db, 'tasks', listId));
 };
 
-// Update todo in firebase
+// Update task completion
 export const toggleCompleteTask = async (task: TaskProps) => {
   await updateDoc(doc(db, 'tasks', task.id), {
     isComplete: !task.isComplete
   });
 };
 
+// Update task title
 export const updateTaskTitle = async (task: TaskProps, newTitle: string) => {
   await updateDoc(doc(db, 'tasks', task.id), {
     title: newTitle

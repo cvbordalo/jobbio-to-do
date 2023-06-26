@@ -1,4 +1,12 @@
-import { Flex, Box, Stack, Heading, Text, FormControl } from '@chakra-ui/react';
+import {
+  Flex,
+  Box,
+  Stack,
+  Heading,
+  Text,
+  FormControl,
+  useToast
+} from '@chakra-ui/react';
 import { FormButton } from '../components/FormButton';
 import { FormInput } from '../components/FormInput';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -9,6 +17,7 @@ import { theme } from '../styles/theme';
 import { UserAuth } from '../contexts/AuthContext';
 import { useState } from 'react';
 
+// Schema for login validation
 const schema = yup
   .object({
     email: yup.string().email('Type a valid email').required('Email is needed'),
@@ -19,12 +28,14 @@ const schema = yup
   })
   .required();
 
+// Interface for login
 interface LoginFormData {
   email: string;
   password: string;
 }
 
 export function SignIn() {
+  // React Hook Form
   const {
     register,
     handleSubmit,
@@ -38,19 +49,41 @@ export function SignIn() {
 
   const navigate = useNavigate();
   const { login } = UserAuth();
+  const toast = useToast();
 
+  // Login by user
   const handleLogin = async (email: string, password: string) => {
     setIsLoading(true);
     try {
       await login(email, password);
       navigate('/home');
     } catch (error) {
+      if (error == 'FirebaseError: Firebase: Error (auth/wrong-password).') {
+        toast({
+          position: 'top',
+          title: 'Failed to login',
+          description: 'Email or password is incorrect',
+          status: 'error',
+          duration: 4000,
+          isClosable: true
+        });
+      } else {
+        toast({
+          position: 'top',
+          title: 'Failed to login',
+          description: 'Please try again later',
+          status: 'error',
+          duration: 4000,
+          isClosable: true
+        });
+      }
       console.log(error);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Submit login function by React Hook Form
   const onSubmit = (userData: LoginFormData) => {
     handleLogin(userData.email, userData.password);
   };
