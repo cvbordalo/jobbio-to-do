@@ -7,13 +7,15 @@ interface FullCreateListProps {
   createList: () => void;
   newListTitle: string;
   setNewListTitle: Function;
+  isLoading: boolean;
 }
 
 export function FullCreateList({
   placeholder,
   createList,
   newListTitle,
-  setNewListTitle
+  setNewListTitle,
+  isLoading
 }: FullCreateListProps) {
   return (
     <HStack
@@ -31,7 +33,11 @@ export function FullCreateList({
         }}
         placeholder={placeholder}
       />
-      <CreateListButton title="Create" createList={createList} />
+      <CreateListButton
+        isLoading={isLoading}
+        title="Create"
+        createList={createList}
+      />
     </HStack>
   );
 }

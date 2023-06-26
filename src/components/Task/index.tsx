@@ -1,21 +1,28 @@
-import { Checkbox, HStack, Icon, Text } from '@chakra-ui/react';
+import {
+  Checkbox,
+  CircularProgress,
+  HStack,
+  Icon,
+  Text
+} from '@chakra-ui/react';
+import { useState } from 'react';
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
-interface TaskProps {
+interface TodoProps {
   id: string;
   title: string;
   isComplete: boolean;
-  toggleComplete: (id: string) => void;
+}
+
+interface TaskProps {
+  task: TodoProps;
+  toggleComplete: (id: string, task: TodoProps) => void;
   removeTask: (id: string) => void;
 }
 
-export function Task({
-  id,
-  title,
-  isComplete,
-  toggleComplete,
-  removeTask
-}: TaskProps) {
+export function Task({ task, toggleComplete, removeTask }: TaskProps) {
+  const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
+
   return (
     <HStack
       alignSelf={'flex-end'}
@@ -29,14 +36,17 @@ export function Task({
       borderWidth={1}
       borderColor={'gray.400'}
     >
-      <Checkbox onChange={() => toggleComplete(id)} isChecked={isComplete} />
+      <Checkbox
+        onChange={() => toggleComplete(task.id, task)}
+        isChecked={task.isComplete}
+      />
       <Text
         ml={2}
-        textDecoration={isComplete ? 'line-through' : ''}
+        textDecoration={task.isComplete ? 'line-through' : ''}
         flex={1}
         color={'gray.100'}
       >
-        {title}
+        {task.title}
       </Text>
       <HStack>
         <Icon
@@ -47,13 +57,21 @@ export function Task({
           mr={2}
           // onClick={() => removeTask(id)}
         />
-        <Icon
-          as={FiTrash2}
-          color={'gray.300'}
-          _hover={{ color: 'red.300' }}
-          cursor={'pointer'}
-          onClick={() => removeTask(id)}
-        />
+        {isDeleteLoading ? (
+          <CircularProgress isIndeterminate size={4} color="gray.300" />
+        ) : (
+          <Icon
+            as={FiTrash2}
+            color={'gray.300'}
+            _hover={{ color: 'red.300' }}
+            cursor={'pointer'}
+            onClick={async () => {
+              setIsDeleteLoading(true);
+              await removeTask(task.id);
+              setIsDeleteLoading(false);
+            }}
+          />
+        )}
       </HStack>
     </HStack>
   );

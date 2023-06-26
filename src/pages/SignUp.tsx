@@ -62,11 +62,7 @@ export function SignUp() {
     setIsLoading(true);
 
     try {
-      const firebaseResponse = await createUser(
-        userData.email,
-        userData.password
-      );
-      console.log(firebaseResponse);
+      await createUser(userData.email, userData.password);
       navigate('/home');
     } catch (error) {
       console.log('Erro no firebase =>', error);

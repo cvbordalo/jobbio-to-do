@@ -4,16 +4,20 @@ import { CreateTaskButton } from '../CreateTaskButton';
 
 interface FullCreateTaskProps {
   placeholder: string;
-  createTask: () => void;
+  listId: string;
+  createTask: (listId: string) => void;
   newTaskTitle: string;
   setNewTaskTitle: Function;
+  isLoading: boolean;
 }
 
 export function FullCreateTask({
   placeholder,
   createTask,
+  listId,
   newTaskTitle,
-  setNewTaskTitle
+  setNewTaskTitle,
+  isLoading
 }: FullCreateTaskProps) {
   return (
     <HStack
@@ -31,7 +35,11 @@ export function FullCreateTask({
         }}
         placeholder={placeholder}
       />
-      <CreateTaskButton title="Create" createTask={createTask} />
+      <CreateTaskButton
+        isLoading={isLoading}
+        title="Create"
+        createTask={() => createTask(listId)}
+      />
     </HStack>
   );
 }
