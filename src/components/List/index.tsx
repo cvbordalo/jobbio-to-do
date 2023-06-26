@@ -4,11 +4,12 @@ import {
   HStack,
   Heading,
   Icon,
+  Input,
   Text,
   VStack
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { FiTrash2 } from 'react-icons/fi';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';
 import { Task } from '../Task';
 import { EmptyTasks } from '../EmptyTasks';
 import { FullCreateTask } from '../FullCreateTask';
@@ -17,9 +18,12 @@ import {
   createTask,
   deleteTask,
   getTasksByList,
-  toggleCompleteTask
+  toggleCompleteTask,
+  updateListTitle
 } from '../../queries';
 import { UserAuth } from '../../contexts/AuthContext';
+import { EditTaskButton } from '../EditTaskButton';
+import { useNavigate } from 'react-router-dom';
 
 interface ListProps {
   index: number;
@@ -40,7 +44,16 @@ export function List({ title, id, removeList, index }: ListProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
 
+  const [isBeingEdited, setIsBeingEdited] = useState<boolean>(false);
+  const [updatedList, setUpdatedList] = useState<string>('');
+  const [isUpdateLoading, setIsUpdateLoading] = useState<boolean>(false);
+
   const { user } = UserAuth();
+  const navigate = useNavigate();
+
+  const toggleIsBeingEdited = () => {
+    setIsBeingEdited(!isBeingEdited);
+  };
 
   const completedTasks = tasks.filter(task => task.isComplete).length;
 
@@ -85,6 +98,21 @@ export function List({ title, id, removeList, index }: ListProps) {
     }
   };
 
+  const handleUpdateListTitle = async () => {
+    setIsUpdateLoading(true);
+    try {
+      await updateListTitle(id, updatedList);
+
+      title = updatedList;
+      navigate(0);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsBeingEdited(false);
+      setIsUpdateLoading(false);
+    }
+  };
+
   // Read list from firebase
   useEffect(() => {
     const fetchTasks = async () => {
@@ -106,9 +134,50 @@ export function List({ title, id, removeList, index }: ListProps) {
         w={'100%'}
         mt={index === 0 ? 0 : 8}
       >
-        <Heading alignSelf={'flex-start'} color={'gray.200'} fontSize={'xl'}>
-          {title}
-        </Heading>
+        <HStack>
+          {isBeingEdited ? (
+            <HStack w={'100%'} spacing={2}>
+              <Input
+                ml={2}
+                flex={1}
+                _placeholder={{ color: 'gray.100' }}
+                placeholder={title}
+                onChange={event => setUpdatedList(event.target.value)}
+                color={'gray.100'}
+              />
+              <EditTaskButton
+                setIsBeingUpdated={setIsBeingEdited}
+                type="update"
+                updateTask={handleUpdateListTitle}
+                isLoading={isUpdateLoading}
+              />
+              <EditTaskButton
+                setIsBeingUpdated={setIsBeingEdited}
+                type="cancel"
+                updateTask={() => {}}
+              />
+            </HStack>
+          ) : (
+            <>
+              <Heading
+                alignSelf={'flex-start'}
+                color={'gray.200'}
+                fontSize={'xl'}
+              >
+                {title}
+              </Heading>
+              <Icon
+                as={FiEdit}
+                color={'gray.300'}
+                _hover={{ color: 'green.300' }}
+                boxSize={5}
+                cursor={'pointer'}
+                ml={2}
+                onClick={toggleIsBeingEdited}
+              />
+            </>
+          )}
+        </HStack>
         {isDeleteLoading ? (
           <CircularProgress isIndeterminate size={4} color="gray.300" />
         ) : (

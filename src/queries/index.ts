@@ -40,6 +40,12 @@ export const deleteList = async (userId: string) => {
   await deleteDoc(doc(db, 'lists', userId));
 };
 
+export const updateListTitle = async (listId: string, newTitle: string) => {
+  await updateDoc(doc(db, 'lists', listId), {
+    title: newTitle
+  });
+};
+
 // TASKS
 
 export const createTask = async (listId: string | undefined, title: string) => {
